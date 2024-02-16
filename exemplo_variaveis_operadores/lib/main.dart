@@ -89,9 +89,7 @@ class _CalculadoraState extends State<Calculadora> {
         case 'Multiplicar':
           resultado = numero1 * numero2;
           break;
-        case 'Potencia':
-          resultado = pow(numero1, numero2);
-          break;
+       
         default:
           resultado = 0.0;
       }
