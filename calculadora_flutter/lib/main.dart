@@ -34,7 +34,7 @@ class _CalculadoraState extends State<Calculadora> {
     // Extrai os números dos campos de entrada, com tratamento para valores inválidos
     double numero1 = double.tryParse(_controllerNumero1.text) ?? 0.0;
     double numero2 = double.tryParse(_controllerNumero2.text) ?? 0.0;
-    double resultado;
+    double? resultado;
 
     // Atualiza o estado da interface para refletir o resultado da operação
     setState(() {

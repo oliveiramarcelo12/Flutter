@@ -28,11 +28,24 @@ class _JogoAdivinhacaoState extends State<JogoAdivinhacao> {
   int _tentativas = 0;
   String _textoResultado = '';
   TextEditingController _controlador = TextEditingController();
+  bool _mostrarBotaoVerificar = true; // Variável para controlar a visibilidade do botão de verificar
+  bool _mostrarBotaoTentarNovamente = false;
 
   @override
   void initState() {
     super.initState();
-    _numeroAlvo = _random.nextInt(100) + 1;
+    _iniciarJogo();
+  }
+
+  void _iniciarJogo() {
+    setState(() {
+      _numeroAlvo = _random.nextInt(100) + 1;
+      _tentativas = 0;
+      _textoResultado = '';
+      _controlador.text = '';
+      _mostrarBotaoVerificar = true; // Mostra o botão de verificar ao iniciar um novo jogo
+      _mostrarBotaoTentarNovamente = false;
+    });
   }
 
   void _verificarPalpite() {
@@ -49,6 +62,8 @@ class _JogoAdivinhacaoState extends State<JogoAdivinhacao> {
       } else {
         _textoResultado =
             'Parabéns! Você acertou o número $_numeroAlvo em $_tentativas tentativas.';
+        _mostrarBotaoVerificar = false; // Oculta o botão de verificar ao acertar o número
+        _mostrarBotaoTentarNovamente = true;
       }
     });
   }
@@ -71,15 +86,26 @@ class _JogoAdivinhacaoState extends State<JogoAdivinhacao> {
               decoration: InputDecoration(labelText: 'Digite um número'),
             ),
             SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _verificarPalpite,
-              child: Text('Verificar'),
+            Visibility(
+              visible: _mostrarBotaoVerificar,
+              child: ElevatedButton(
+                onPressed: _verificarPalpite,
+                child: Text('Verificar'),
+              ),
             ),
             SizedBox(height: 16.0),
             Text(
               '$_textoResultado',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16.0),
+            Visibility(
+              visible: _mostrarBotaoTentarNovamente,
+              child: ElevatedButton(
+                onPressed: _iniciarJogo,
+                child: Text('Tentar Novamente'),
+              ),
             ),
           ],
         ),
