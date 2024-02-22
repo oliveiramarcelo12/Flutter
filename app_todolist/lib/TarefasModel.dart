@@ -1,8 +1,8 @@
-class Tarefa {
+class Tarefas {
   String descricao;
   bool concluida;
   
   // construtor
-Tarefa(this.descricao,this.concluida);
+Tarefas(this.descricao,this.concluida);
   
 }

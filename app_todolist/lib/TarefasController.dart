@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class TarefasController extends ChangeNotifier{
   //lista de tarefas
-  List<Tarefa> _tarefas= [];
+  List<Tarefas> _tarefas= [];
   //Getter para acessar a lkista de tarefas
-  List <Tarefa> get tarefas => _tarefas;
+  List <Tarefas> get tarefas => _tarefas;
 
   //Método para adicionar uma nova tarefa á lista
   void adicionarTarefa(String descricao){
-    _tarefas.add(Tarefa(descricao, false));
+    _tarefas.add(Tarefas(descricao, false));
     //Notifica os ouvintes (widgets) sobre a mudança no estado
     notifyListeners();
   }
@@ -19,6 +19,14 @@ class TarefasController extends ChangeNotifier{
       _tarefas[indice].concluida = true;
       notifyListeners();
       
+    }
+  }
+
+  void excluirTarefa (int indice){
+    if (indice >= 0 && indice < _tarefas.length) {
+      _tarefas.removeAt(indice);
+//Notifica os ouvintes sobre a mudança no estado
+notifyListeners();
     }
   }
 
