@@ -1,34 +1,45 @@
 import 'package:app_todolist/TarefasModel.dart';
 import 'package:flutter/material.dart';
 
-class TarefasController extends ChangeNotifier{
-  //lista de tarefas
-  List<Tarefas> _tarefas= [];
-  //Getter para acessar a lkista de tarefas
-  List <Tarefas> get tarefas => _tarefas;
+class TarefasController extends ChangeNotifier {
+  // Lista de tarefas
+  List<Tarefas> _tarefas = [];
 
-  //Método para adicionar uma nova tarefa á lista
-  void adicionarTarefa(String descricao){
+  // Getter para acessar a lista de tarefas
+  List<Tarefas> get tarefas => _tarefas;
+
+  // Método para adicionar uma nova tarefa à lista
+ void adicionarTarefa(String descricao) {
+  if (descricao.isNotEmpty) { // Verifica se a descrição não está vazia
     _tarefas.add(Tarefas(descricao, false));
-    //Notifica os ouvintes (widgets) sobre a mudança no estado
+    // Notifica os ouvintes (widgets) sobre a mudança no estado
     notifyListeners();
   }
-  // Método para marcar uma tarefa como concluída com base no índice
-  void marcarComoConcluida (int indice){
-    if (indice >= 0 && indice < _tarefas.length) {
-      _tarefas[indice].concluida = true;
-      notifyListeners();
-      
-    }
-  }
+}
 
-  void excluirTarefa (int indice){
+
+  void marcarComoConcluida(int indice) {
+  if (indice >= 0 && indice < _tarefas.length) {
+    _tarefas[indice].concluida = true;
+    notifyListeners();
+  }
+}
+
+void desmarcarComoConcluida(int indice) {
+  if (indice >= 0 && indice < _tarefas.length) {
+    _tarefas[indice].concluida = false;
+    notifyListeners();
+  }
+}
+
+
+
+  // Método para excluir uma tarefa com base no índice
+  void excluirTarefa(int indice) {
     if (indice >= 0 && indice < _tarefas.length) {
       _tarefas.removeAt(indice);
-//Notifica os ouvintes sobre a mudança no estado
-notifyListeners();
+      // Notifica os ouvintes sobre a mudança no estado
+      notifyListeners();
     }
   }
-
-  
 }
