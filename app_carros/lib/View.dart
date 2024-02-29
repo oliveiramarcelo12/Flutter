@@ -21,29 +21,17 @@ class TelaListaCarro extends StatelessWidget {
             child: Consumer<CarroController>(
               builder: (context, model, child) {
                 return ListView.builder(
-                  itemCount: model.tarefas.length,
+                  itemCount: model.listarCarros.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       // Exibição do texto da tarefa
-                      title: Text(model.tarefas[index].descricao),
-                      // Checkbox para marcar a tarefa como concluída
-                      trailing: Checkbox(
-                        value: model.tarefas[index].concluida ?? false,
-                        onChanged: (value) {
-                          if (value != null) {
-                            if (value) {
-                              model.marcarComoConcluida(index);
-                            } else {
-                              model.desmarcarComoConcluida(index);
-                            }
-                          }
-                        },
-                      ),
+                      title: Text(model.listarCarros[index].modelo),
+                      
+                      
 
-                      // Exclui a tarefa ao manter pressionado
-                      onLongPress: () {
-                        // Chamando o método excluirTarefa do Provider para atualizar o estado
-                        model.excluirTarefa(index);
+                      //quando clicado o carro
+                      onTap: () {
+                       // criar método para trocar a tela
                       },
                     );
                   },

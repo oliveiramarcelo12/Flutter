@@ -13,7 +13,7 @@ class Carro{
       
     }
   }
-   set ano(String novoAno){
+   set ano(int novoAno){
     if (novoAno >= 1900) {
       _ano = novoAno;
       

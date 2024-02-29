@@ -7,6 +7,6 @@ class CarroController{
 
   void adicionarCarro(String modelo, int ano, String imagemUrl){
     Carro carro = Carro(modelo, ano, imagemUrl);
-    carrosLista.add(carro);
+    _carroLista.add(carro);
   }
 }
