@@ -1,12 +1,12 @@
 import 'package:app_carros/Model.dart';
 
-class CarrosController{
-  List<Carro> _listaCarros = [];
-  
-  List<Carro> get listaCarros => _listaCarros;
+class CarroController{
+  List<Carro> _carroLista = [];
 
-  void adicionarCarro(String modelo, int ano, String imageUrl){
+  List<Carro> get listarCarros => _carroLista;
+
+  void adicionarCarro(String modelo, int ano, String imagemUrl){
     Carro carro = Carro(modelo, ano, imagemUrl);
-    _listaCarros.add(carro);
+    carrosLista.add(carro);
   }
 }
