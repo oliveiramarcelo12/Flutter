@@ -7,6 +7,7 @@ class Carro{
   String get modelo => _modelo;
   int get ano => _ano;
   String get imageUrl => _imagemUrl;
+  
   set modelo(String novoModelo){
     if (novoModelo.isNotEmpty) {
       _modelo = novoModelo;

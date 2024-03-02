@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:app_carros/Controller.dart';
 import 'package:app_carros/Model.dart';
 import 'package:flutter/material.dart';
@@ -50,12 +52,34 @@ class TelaListaCarro extends StatelessWidget {
           ),
         ],
       ),
-      //floatingActionButton: FloatingActionButtot(
-        //OnPressed: showDialog( builder: builder)
-      //),
+      floatingActionButton: FloatingActionButton(
+        onPressed:(){
+          _adicionarCarro();
+        }, 
+        child: Icon(Icons.add),
+      ),
     );
   }
+  
+  void _adicionarCarro() {
+    showDialog(context: context,
+     builder: (context){
+      return AlertDialog(
+        title: Text('Adicionar Carro'),
+        content: SingleChildScrollView(
+          child: Column(children: [
+
+            
+          ],) 
+          ),
+      )
+
+     }
+  }
 }
+
+
+
 
 class TelaDetalheCarro extends StatelessWidget {
   final Carro carro;
@@ -70,7 +94,7 @@ class TelaDetalheCarro extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(carro.imageUrl),
+            Image.network(carro._imagemUrl),
             SizedBox(height: 20),
             Text("Modelo: ${carro.modelo}"),
             Text("Ano: ${carro.ano}"),
