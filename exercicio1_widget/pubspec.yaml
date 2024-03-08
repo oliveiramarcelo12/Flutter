@@ -19,3 +19,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/romero.png
+    - assets/cristiano_ronaldo.jpg
+    - assets/pele.jpg
+    - assets/lionel_messi.jpg
