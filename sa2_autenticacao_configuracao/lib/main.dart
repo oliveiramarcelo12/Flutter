@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'View.dart';
+import 'package:sa2_autenticacao_configuracao/View/Home.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -10,13 +11,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title:
-    "Exemplo SQLLite",
-    theme: ThemeData(
-      primarySwatch: Colors.blue
-    ),
-    home: HomePage(),
+      title: "Exemplo SQLLite",
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: LoginScreen(),
     );
-    
   }
 }
