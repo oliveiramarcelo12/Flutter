@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sa2_autenticacao_configuracao/Controller/Controller.dart';
+import 'package:sa2_autenticacao_configuracao/View/Cadastro.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -66,14 +68,30 @@ class _LoginFormState extends State<LoginForm> {
               },
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  // Adicione a lógica para acessar a conta aqui
-                }
-              },
-              child: Text('Acessar'),
-            ),
+           ElevatedButton(
+  onPressed: () async {
+    if (_formKey.currentState!.validate()) {
+      String email = _emailController.text;
+      String senha = _senhaController.text;
+
+      BancoDadosCrud bancoDados = BancoDadosCrud();
+      Map<String, dynamic>? usuario = await bancoDados.buscarUsuario(email);
+
+      if (usuario != null && usuario['senha'] == senha) {
+        // Login bem-sucedido
+        String nome = usuario['nome'];
+        print('Login bem-sucedido para o usuário $nome');
+        
+        // Aqui você pode navegar para a próxima tela após o login
+      } else {
+        // Credenciais inválidas ou usuário não encontrado
+        print('Credenciais inválidas ou usuário não encontrado');
+      }
+    }
+  },
+  child: Text('Acessar'),
+),
+
             SizedBox(height: 20),
             TextButton(
               onPressed: () {

@@ -88,10 +88,14 @@ class _CadastroFormState extends State<CadastroForm> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   // Adicione a lógica para cadastrar o usuário aqui
-                  String nome = _nomeController.text;
+                  String name = _nomeController.text;
                   String email = _emailController.text;
-                  String senha = _senhaController.text;
-                  print('Nome: $nome\nE-mail: $email\nSenha: $senha');
+                  String password = _senhaController.text;
+
+                  // Aqui você realizaria o cadastro do usuário, por exemplo, usando o DatabaseHelper
+
+                  // Após o cadastro ser concluído com sucesso, redirecione para a tela de login
+                  Navigator.pop(context);
                 }
               },
               child: Text('Cadastrar'),
