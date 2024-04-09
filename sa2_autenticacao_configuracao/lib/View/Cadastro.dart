@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sa2_autenticacao_configuracao/Controller/Controller.dart';
+import 'package:sa2_autenticacao_configuracao/View/Home.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -24,7 +26,6 @@ class CadastroForm extends StatefulWidget {
   @override
   _CadastroFormState createState() => _CadastroFormState();
 }
-
 class _CadastroFormState extends State<CadastroForm> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nomeController = TextEditingController();
@@ -84,25 +85,36 @@ class _CadastroFormState extends State<CadastroForm> {
               },
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  // Adicione a lógica para cadastrar o usuário aqui
-                  String name = _nomeController.text;
-                  String email = _emailController.text;
-                  String password = _senhaController.text;
+      ElevatedButton(
+  onPressed: () async {
+    if (_formKey.currentState!.validate()) {
+      String nome = _nomeController.text;
+      String email = _emailController.text;
+      String senha = _senhaController.text;
 
-                  // Aqui você realizaria o cadastro do usuário, por exemplo, usando o DatabaseHelper
+      BancoDadosCrud bancoDados = BancoDadosCrud();
+      
+      // Salvando os dados de cadastro no banco de dados
+      await bancoDados.cadastrarUsuario(nome, email, senha);
+      
+      // Exibir uma mensagem ou realizar outra ação após o cadastro
+      print('Usuário cadastrado com sucesso!');
 
-                  // Após o cadastro ser concluído com sucesso, redirecione para a tela de login
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Cadastrar'),
-            ),
+      // Navegar para a tela de login após o cadastro
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    }
+  },
+  child: Text('Cadastrar'),
+),
+
+
           ],
         ),
       ),
     );
   }
 }
+
