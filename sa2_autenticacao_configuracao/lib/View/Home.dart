@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sa2_autenticacao_configuracao/Controller/Controller.dart';
-import 'package:sa2_autenticacao_configuracao/View/AcessoLogin.dart';
+import 'package:sa2_autenticacao_configuracao/View/acesso_login.dart';
 import 'package:sa2_autenticacao_configuracao/View/Cadastro.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: LoginScreen(),
-  ));
-}
 
 class LoginScreen extends StatelessWidget {
   @override

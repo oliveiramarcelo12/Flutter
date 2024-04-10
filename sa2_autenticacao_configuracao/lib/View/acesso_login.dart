@@ -1,5 +1,5 @@
-// Na tela de acesso após o login
 import 'package:flutter/material.dart';
+import 'tela_configuracao.dart';
 
 class TelaAcesso extends StatelessWidget {
   final String nome;
@@ -22,7 +22,7 @@ class TelaAcesso extends StatelessWidget {
                 // Navegar para a tela de configuração
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TelaConfiguracao()),
+                  MaterialPageRoute(builder: (context) => TelaConfiguracoes()),
                 );
               },
               child: Text('Configuração'),
@@ -34,23 +34,3 @@ class TelaAcesso extends StatelessWidget {
   }
 }
 
-// Definição da tela de configuração
-class TelaConfiguracao extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Configuração'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Esta é a sua tela de configuração.'),
-            // Adicione opções de configuração aqui
-          ],
-        ),
-      ),
-    );
-  }
-}
