@@ -47,7 +47,7 @@ class _LoginFormState extends State<LoginForm> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => ConfiguracoesScreen(email: user.email),
+              builder: (context) =>  ConfiguracoesPage(email: user.email),
             ),
           );
         } else {

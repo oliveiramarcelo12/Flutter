@@ -1,38 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class ConfiguracoesScreen extends StatelessWidget {
-   String email;
-  ConfiguracoesScreen({required String email});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: "Teste Shared Preferences",
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(brightness: Brightness.light),
-        darkTheme: ThemeData(brightness: Brightness.dark),
-        home: ConfiguracoesPage(email));
-  }
-}
+import 'package:sa2_correcao/ViewLogin.dart'; // Importe a tela de login ou substitua pelo caminho correto
 
 class ConfiguracoesPage extends StatefulWidget {
-  late String email;
+  final String email;
 
-  ConfiguracoesPage(String email);
+  ConfiguracoesPage({required this.email});
 
-@override
-  _ConfiguracoesPageState createState() => _ConfiguracoesPageState(email);
+  @override
+  _ConfiguracoesPageState createState() =>
+      _ConfiguracoesPageState(email: email);
 }
 
 class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
-  //Atributos
   late SharedPreferences _prefs;
-  bool $email_darkMode = false;
-   _ConfiguracoesPageState(String email);
+  bool _darkMode = false;
+  final String email;
+  String idioma = 'PT-BR';
+  List<String> idiomas = ['PT-BR', 'EN-US', 'ES-AR'];
 
+  _ConfiguracoesPageState({required this.email});
 
-  //Métodos
   @override
   void initState() {
     super.initState();
@@ -42,34 +30,71 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
   Future<void> _loadPreferences() async {
     _prefs = await SharedPreferences.getInstance();
     setState(() {
-      $email_darkMode = _prefs.getBool('darkMode') ?? false;
+      _darkMode = _prefs.getBool('${email}darkMode') ?? false;
     });
   }
 
-  Future<void> _mudancaDarkMode() async {
+  Future<void> _mudarDarkMode(bool value) async {
     setState(() {
-      $email_darkMode = !$email_darkMode;
+      _darkMode = value;
     });
-    await _prefs.setBool('darkMode', $email_darkMode);
+    await _prefs.setBool('${email}darkMode', value);
+  }
+
+  Future<void> _mudarIdioma(String? newValue) async {
+    if (newValue != null) {
+      setState(() {
+        idioma = newValue;
+      });
+      // Implemente a lógica para mudar o idioma
+    }
+  }
+
+  Future<void> _logout() async {
+    // Limpe as informações de login (por exemplo, o email armazenado)
+    await _prefs.remove('${email}email');
+    // Navegue de volta para a tela de login
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedTheme(
-      data: $email_darkMode
-          ? ThemeData.dark()
-          : ThemeData.light(), // Define o tema com base no modo escuro
-      duration: Duration(milliseconds: 500), // Define a duração da transição
+      data: _darkMode ? ThemeData.dark() : ThemeData.light(),
+      duration: Duration(milliseconds: 500),
       child: Scaffold(
         appBar: AppBar(
           title: Text('Teste de Armazenamento Interno'),
         ),
         body: Center(
-          child: Switch(
-            value: $email_darkMode,
-            onChanged: (value) {
-              _mudancaDarkMode();
-            },
+          child: Column(
+            children: [
+              Text("Selecione o Modo Escuro"),
+              Switch(
+                value: _darkMode,
+                onChanged: (value) {
+                  _mudarDarkMode(value);
+                },
+              ),
+              Text("Selecione o Idioma"),
+              DropdownButton<String>(
+                value: idioma,
+                onChanged: _mudarIdioma,
+                items: idiomas.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              ElevatedButton(
+                onPressed: _logout,
+                child: Text('Logout'),
+              ),
+            ],
           ),
         ),
       ),
