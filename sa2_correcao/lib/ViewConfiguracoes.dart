@@ -9,7 +9,7 @@ class ConfiguracoesPage extends StatefulWidget {
 
   @override
   _ConfiguracoesPageState createState() =>
-      _ConfiguracoesPageState(email: email);
+  _ConfiguracoesPageState(email: email);
 }
 
 class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
