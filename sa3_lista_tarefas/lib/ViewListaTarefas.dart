@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sa3_lista_tarefas/Viewlogin.dart';
+import 'package:sa3_lista_tarefas/ModelTarefas.dart';
+import 'package:sa3_lista_tarefas/Viewlogin.dart'; // Importe a tela de login
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sa3_lista_tarefas/TarefasController.dart';
 
-class Tarefa {
-  String titulo;
-  bool concluida;
 
-  Tarefa({required this.titulo, this.concluida = false});
-}
 
+// Página de lista de tarefas, um StatefulWidget
 class ListaTarefaPage extends StatefulWidget {
   final String email;
 
@@ -20,8 +17,9 @@ class ListaTarefaPage extends StatefulWidget {
 }
 
 class _ListaTarefaPageState extends State<ListaTarefaPage> {
+  bool _showCompletedTasks = false; // Estado para controlar se devemos exibir apenas tarefas concluídas
   List<Tarefa> tasks = []; // Lista de tarefas
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController(); // Controlador para o campo de texto
   late ListaTarefaController _listaTarefaController;
   final String email;
 
@@ -32,31 +30,41 @@ class _ListaTarefaPageState extends State<ListaTarefaPage> {
   @override
   void initState() {
     super.initState();
-    _loadTasks();
+    _loadTasks(); // Carregar tarefas ao iniciar
   }
 
+  // Método para carregar tarefas
   Future<void> _loadTasks() async {
-    tasks = (await _listaTarefaController.loadTasks())
-        .map((titulo) => Tarefa(titulo: titulo))
-        .toList();
-    setState(() {});
+    List<Map<String, dynamic>> loadedTasks = await _listaTarefaController.loadTasks();
+    setState(() {
+      tasks = loadedTasks.map((task) => Tarefa(titulo: task['titulo'], concluida: task['concluida'])).toList();
+    });
   }
 
+  // Método para salvar tarefas
   Future<void> _saveTasks() async {
-    await _listaTarefaController.saveTasks(tasks.map((tarefa) => tarefa.titulo).toList());
+    List<Map<String, dynamic>> taskMapList = tasks.map((tarefa) => {'titulo': tarefa.titulo, 'concluida': tarefa.concluida}).toList();
+    await _listaTarefaController.saveTasks(taskMapList);
   }
 
+  // Método para alternar a exibição de tarefas concluídas
+  void _toggleShowCompletedTasks() {
+    setState(() {
+      _showCompletedTasks = !_showCompletedTasks;
+    });
+  }
+
+  // Método para fazer logout
   void _logout() async {
-    // Limpar informações de login
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('${email}email');
-    // Navegar para tela de login
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      MaterialPageRoute(builder: (context) => LoginScreen()), // Navegar para a tela de login e remover todas as outras rotas da pilha
       (Route<dynamic> route) => false,
     );
   }
 
+  // Método para excluir uma tarefa
   void _deleteTask(int index) {
     setState(() {
       tasks.removeAt(index);
@@ -64,6 +72,7 @@ class _ListaTarefaPageState extends State<ListaTarefaPage> {
     });
   }
 
+  // Método para atualizar uma tarefa
   void _updateTask(int index) {
     showDialog(
       context: context,
@@ -94,16 +103,16 @@ class _ListaTarefaPageState extends State<ListaTarefaPage> {
     );
   }
 
-void _toggleTaskCompleted(int index) {
-  setState(() {
-    // Altera o estado de concluída da tarefa
-    tasks[index].concluida = !tasks[index].concluida;
-    _saveTasks(); // Salva a lista de tarefas atualizadas
-    if (tasks[index].concluida) {
-      // Se a tarefa estiver concluída, você pode adicionar algum código adicional aqui, se necessário
+  // Método para alternar o estado de conclusão de uma tarefa
+  void _toggleTaskCompleted(int index) {
+    String taskTitle = tasks[index].titulo.trim(); // Remover espaços em branco
+    if (taskTitle.isNotEmpty) {
+      setState(() {
+        tasks[index].concluida = !tasks[index].concluida;
+        _saveTasks(); // Salva as tarefas atualizadas
+      });
     }
-  });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +120,13 @@ void _toggleTaskCompleted(int index) {
       appBar: AppBar(
         title: Text('Lista de Tarefas'),
         actions: <Widget>[
+          // Botão para alternar a exibição de tarefas concluídas
+          IconButton(
+            icon: Icon(Icons.filter_alt),
+            onPressed: _toggleShowCompletedTasks,
+            tooltip: _showCompletedTasks ? 'Exibir todas as tarefas' : 'Exibir apenas tarefas concluídas',
+          ),
+          // Botão para fazer logout
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: _logout,
@@ -118,20 +134,25 @@ void _toggleTaskCompleted(int index) {
         ],
       ),
       body: ListView.builder(
-        itemCount: tasks.length,
+        // Usamos um operador ternário para decidir quantas tarefas exibir com base no estado _showCompletedTasks
+        itemCount: _showCompletedTasks ? tasks.length : tasks.where((task) => !task.concluida).length,
         itemBuilder: (context, index) {
+          // Obtemos a lista de tarefas a serem exibidas com base no estado _showCompletedTasks
+          List<Tarefa> displayedTasks = _showCompletedTasks ? tasks : tasks.where((task) => !task.concluida).toList();
+          // Obtemos a tarefa na lista filtrada pelo índice atual
+          Tarefa task = displayedTasks[index];
           return ListTile(
             title: Text(
-              tasks[index].titulo,
+              task.titulo,
               style: TextStyle(
-                decoration: tasks[index].concluida ? TextDecoration.lineThrough : null,
+                decoration: task.concluida ? TextDecoration.lineThrough : null,
               ),
             ),
-            onTap: () => _updateTask(index), // Atualizar tarefa ao pressionar
-            onLongPress: () => _deleteTask(index), // Excluir tarefa ao pressionar e segurar
+            onTap: () => _updateTask(tasks.indexOf(task)),
+            onLongPress: () => _deleteTask(tasks.indexOf(task)),
             trailing: Checkbox(
-              value: tasks[index].concluida,
-              onChanged: (value) => _toggleTaskCompleted(index),
+              value: task.concluida,
+              onChanged: (value) => _toggleTaskCompleted(tasks.indexOf(task)),
             ),
           );
         },
@@ -152,12 +173,19 @@ void _toggleTaskCompleted(int index) {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      setState(() {
-                        tasks.add(Tarefa(titulo: _controller.text));
-                        _saveTasks();
-                        _controller.clear();
-                        Navigator.of(context).pop();
-                      });
+                      String newTaskTitle = _controller.text.trim();
+                      if (newTaskTitle.isNotEmpty) {
+                        setState(() {
+                          tasks.add(Tarefa(titulo: newTaskTitle));
+                          _saveTasks();
+                          _controller.clear();
+                          Navigator.of(context).pop();
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Por favor, insira o título da tarefa'),
+                        ));
+                      }
                     },
                     child: Text('Adicionar'),
                   ),

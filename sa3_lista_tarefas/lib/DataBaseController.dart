@@ -1,51 +1,66 @@
 import 'package:path/path.dart';
-import 'package:sa3_lista_tarefas/UserModel.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sa3_lista_tarefas/UserModel.dart';
 
+// Classe para lidar com operações CRUD no banco de dados
 class BancoDadosCrud {
-  static const String DB_NOME = 'users.db'; // Nome do banco de dados
-  static const String TABLE_NOME = 'users'; // Nome da tabela
+  // Definindo o nome do banco de dados e o nome da tabela
+  static const String DB_NOME = 'users.db';
+  static const String TABLE_NOME = 'users';
 
-  static const String SCRIPT_CRIACAO_TABELA = // Script SQL para criar a tabela
+  // Script para criar a tabela se ela não existir
+  static const String SCRIPT_CRIACAO_TABELA =
       "CREATE TABLE IF NOT EXISTS $TABLE_NOME("
-      "email TEXT PRIMARY KEY,"
+      "email TEXT PRIMARY KEY UNIQUE,"
       "nome TEXT,"
       "senha TEXT)";
 
+  // Método para abrir o banco de dados
   Future<Database> _chamarBanco() async {
     return openDatabase(
-      join(await getDatabasesPath(), DB_NOME), // Caminho do banco de dados
+      join(await getDatabasesPath(), DB_NOME),
       onCreate: (db, version) {
-        return db.execute(
-            SCRIPT_CRIACAO_TABELA); // Executa o script de criação da tabela quando o banco é criado
+        // Executar o script de criação da tabela quando o banco de dados for criado pela primeira vez
+        return db.execute(SCRIPT_CRIACAO_TABELA);
       },
-      version: 1,
+      version: 1, // Versão do banco de dados
     );
   }
 
-  // Método para criar um novo contato no banco de dados
+  // Método para adicionar um novo usuário ao banco de dados
   Future<void> create(User user) async {
     try {
       final Database db = await _chamarBanco();
-      await db.insert(
-          TABLE_NOME, user.toMap()); // Insere o contato no banco de dados
+      // Verificar se o usuário já existe no banco de dados
+      List<Map<String, dynamic>> result = await db.query(TABLE_NOME,
+          where: 'email = ?',
+          whereArgs: [user.email]);
+      if (result.isEmpty) {
+        // Se o usuário não existir, inseri-lo no banco de dados
+        await db.insert(TABLE_NOME, user.toMap());
+      } else {
+        // Se o usuário já existir, lançar uma exceção
+        throw Exception('O email já está cadastrado.');
+      }
     } catch (ex) {
       print(ex);
-      return;
+      throw Exception('Erro ao criar usuário: $ex');
     }
   }
 
-  // Método para buscar o user do banco de dados
+  // Método para obter um usuário do banco de dados com base no email e na senha fornecidos
   Future<User?> getUser(String email, String senha) async {
     try {
       final Database db = await _chamarBanco();
       final List<Map<String, dynamic>> maps = await db.query(TABLE_NOME,
           where: 'email = ? AND senha = ?',
-          whereArgs: [email, senha]); // Consulta todos os contatos na tabela
+          whereArgs: [email, senha]);
 
       if (maps.isNotEmpty) {
+        // Se encontrar um usuário com as credenciais fornecidas, retorná-lo como um objeto User
         return User.fromMap(maps.first);
       } else {
+        // Se não encontrar nenhum usuário, retornar null
         return null;
       }
     } catch (ex) {
@@ -53,27 +68,19 @@ class BancoDadosCrud {
       return null;
     }
   }
-  //CRIAR UM MÉTODO DO TIPO BOOL
-  Future<bool> existsUser(String email, String senha) async {
-    bool acessoPermitido = false;
-    try{
-    final Database db = await _chamarBanco();
-    final List<Map<String, dynamic>> maps =
-          await db.query(TABLE_NOME,
-          where: 'email = ? AND senha = ?',
-          whereArgs: [email,senha]
-          ); // Consulta todos os contatos na tabela
 
-      if (maps.isNotEmpty){
-        acessoPermitido = true;
-        return acessoPermitido;
-      }else{
-        return acessoPermitido;
-      }
+  // Método para verificar se um usuário com o email fornecido existe no banco de dados
+  Future<bool> existsUser(String email, [String? senha]) async {
+    try {
+      final Database db = await _chamarBanco();
+      final List<Map<String, dynamic>> maps =
+          await db.query(TABLE_NOME, where: 'email = ?', whereArgs: [email]);
+
+      // Verificar se a lista de resultados não está vazia
+      return maps.isNotEmpty;
     } catch (ex) {
       print(ex);
-      return acessoPermitido;
+      return false;
     }
   }
-
 }
