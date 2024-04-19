@@ -32,9 +32,8 @@ class BancoDadosCrud {
     try {
       final Database db = await _chamarBanco();
       // Verificar se o usuário já existe no banco de dados
-      List<Map<String, dynamic>> result = await db.query(TABLE_NOME,
-          where: 'email = ?',
-          whereArgs: [user.email]);
+      List<Map<String, dynamic>> result = await db
+          .query(TABLE_NOME, where: 'email = ?', whereArgs: [user.email]);
       if (result.isEmpty) {
         // Se o usuário não existir, inseri-lo no banco de dados
         await db.insert(TABLE_NOME, user.toMap());
@@ -53,8 +52,7 @@ class BancoDadosCrud {
     try {
       final Database db = await _chamarBanco();
       final List<Map<String, dynamic>> maps = await db.query(TABLE_NOME,
-          where: 'email = ? AND senha = ?',
-          whereArgs: [email, senha]);
+          where: 'email = ? AND senha = ?', whereArgs: [email, senha]);
 
       if (maps.isNotEmpty) {
         // Se encontrar um usuário com as credenciais fornecidas, retorná-lo como um objeto User

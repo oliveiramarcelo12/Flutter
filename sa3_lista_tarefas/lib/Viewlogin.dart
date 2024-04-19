@@ -28,13 +28,16 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>(); // Chave para validar o formulário
-  TextEditingController _emailController = TextEditingController(); // Controlador do campo de e-mail
-  TextEditingController _senhaController = TextEditingController(); // Controlador do campo de senha
+  TextEditingController _emailController =
+      TextEditingController(); // Controlador do campo de e-mail
+  TextEditingController _senhaController =
+      TextEditingController(); // Controlador do campo de senha
   bool _loading = false; // Variável para controlar o estado de carregamento
 
   // Método para realizar o login
   void _login() async {
-    if (_formKey.currentState!.validate()) { // Verifica se o formulário é válido
+    if (_formKey.currentState!.validate()) {
+      // Verifica se o formulário é válido
       String email = _emailController.text;
       String senha = _senhaController.text;
 
@@ -42,13 +45,17 @@ class _LoginFormState extends State<LoginForm> {
         _loading = true; // Ativa o estado de carregamento
       });
 
-      BancoDadosCrud bancoDados = BancoDadosCrud(); // Instância do controlador do banco de dados
+      BancoDadosCrud bancoDados =
+          BancoDadosCrud(); // Instância do controlador do banco de dados
       try {
-        bool isUserRegistered = await bancoDados.existsUser(email, senha); // Verifica se o usuário está cadastrado
+        bool isUserRegistered = await bancoDados.existsUser(
+            email, senha); // Verifica se o usuário está cadastrado
         if (isUserRegistered) {
-          User? user = await bancoDados.getUser(email, senha); // Obtém o usuário do banco de dados
+          User? user = await bancoDados.getUser(
+              email, senha); // Obtém o usuário do banco de dados
           if (user != null) {
-            Navigator.pushReplacement( // Navega para a tela da lista de tarefas
+            Navigator.pushReplacement(
+              // Navega para a tela da lista de tarefas
               context,
               MaterialPageRoute(
                 builder: (context) => ListaTarefaPage(email: user.email),
@@ -56,18 +63,21 @@ class _LoginFormState extends State<LoginForm> {
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Email ou senha incorretos'), // Exibe uma mensagem de erro
+              content: Text(
+                  'Email ou senha incorretos'), // Exibe uma mensagem de erro
             ));
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Email não cadastrado. Por favor, cadastre-se.'), // Exibe uma mensagem para o usuário se cadastrar
+            content: Text(
+                'Email não cadastrado. Por favor, cadastre-se.'), // Exibe uma mensagem para o usuário se cadastrar
           ));
         }
       } catch (e) {
         print('Erro durante o login: $e');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Erro durante o login. Tente novamente mais tarde.'), // Exibe uma mensagem de erro genérica
+          content: Text(
+              'Erro durante o login. Tente novamente mais tarde.'), // Exibe uma mensagem de erro genérica
         ));
       } finally {
         setState(() {
@@ -106,7 +116,8 @@ class _LoginFormState extends State<LoginForm> {
                 return null;
               },
               inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp(r'[0-9]')), // Filtragem de caracteres
+                FilteringTextInputFormatter.deny(
+                    RegExp(r'[0-9]')), // Filtragem de caracteres
               ],
             ),
             SizedBox(height: 20),
@@ -125,7 +136,8 @@ class _LoginFormState extends State<LoginForm> {
             _loading
                 ? CircularProgressIndicator() // Exibição de um indicador de carregamento
                 : ElevatedButton(
-                    onPressed: _login, // Função chamada ao pressionar o botão de login
+                    onPressed:
+                        _login, // Função chamada ao pressionar o botão de login
                     child: Text('Acessar'),
                   ),
             SizedBox(height: 20),
@@ -133,7 +145,9 @@ class _LoginFormState extends State<LoginForm> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CadastroScreen()), // Navega para a tela de cadastro
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CadastroScreen()), // Navega para a tela de cadastro
                 );
               },
               child: Text('Não tem uma conta? Cadastre-se'),

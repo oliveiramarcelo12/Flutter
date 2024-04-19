@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sa3_lista_tarefas/ModelTarefas.dart';
-import 'package:sa3_lista_tarefas/Viewlogin.dart'; // Importe a tela de login
+import 'package:sa3_lista_tarefas/ViewLogin.dart'; // Importe a tela de login
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sa3_lista_tarefas/TarefasController.dart';
-
-
 
 // Página de lista de tarefas, um StatefulWidget
 class ListaTarefaPage extends StatefulWidget {
@@ -17,9 +15,11 @@ class ListaTarefaPage extends StatefulWidget {
 }
 
 class _ListaTarefaPageState extends State<ListaTarefaPage> {
-  bool _showCompletedTasks = false; // Estado para controlar se devemos exibir apenas tarefas concluídas
+  bool _showCompletedTasks =
+      false; // Estado para controlar se devemos exibir apenas tarefas concluídas
   List<Tarefa> tasks = []; // Lista de tarefas
-  final TextEditingController _controller = TextEditingController(); // Controlador para o campo de texto
+  final TextEditingController _controller =
+      TextEditingController(); // Controlador para o campo de texto
   late ListaTarefaController _listaTarefaController;
   final String email;
 
@@ -35,15 +35,22 @@ class _ListaTarefaPageState extends State<ListaTarefaPage> {
 
   // Método para carregar tarefas
   Future<void> _loadTasks() async {
-    List<Map<String, dynamic>> loadedTasks = await _listaTarefaController.loadTasks();
+    List<Map<String, dynamic>> loadedTasks =
+        await _listaTarefaController.loadTasks();
     setState(() {
-      tasks = loadedTasks.map((task) => Tarefa(titulo: task['titulo'], concluida: task['concluida'])).toList();
+      tasks = loadedTasks
+          .map((task) =>
+              Tarefa(titulo: task['titulo'], concluida: task['concluida']))
+          .toList();
     });
   }
 
   // Método para salvar tarefas
   Future<void> _saveTasks() async {
-    List<Map<String, dynamic>> taskMapList = tasks.map((tarefa) => {'titulo': tarefa.titulo, 'concluida': tarefa.concluida}).toList();
+    List<Map<String, dynamic>> taskMapList = tasks
+        .map((tarefa) =>
+            {'titulo': tarefa.titulo, 'concluida': tarefa.concluida})
+        .toList();
     await _listaTarefaController.saveTasks(taskMapList);
   }
 
@@ -59,7 +66,9 @@ class _ListaTarefaPageState extends State<ListaTarefaPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('${email}email');
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => LoginScreen()), // Navegar para a tela de login e remover todas as outras rotas da pilha
+      MaterialPageRoute(
+          builder: (context) =>
+              LoginScreen()), // Navegar para a tela de login e remover todas as outras rotas da pilha
       (Route<dynamic> route) => false,
     );
   }
@@ -77,7 +86,8 @@ class _ListaTarefaPageState extends State<ListaTarefaPage> {
     showDialog(
       context: context,
       builder: (context) {
-        final TextEditingController _updateController = TextEditingController(text: tasks[index].titulo);
+        final TextEditingController _updateController =
+            TextEditingController(text: tasks[index].titulo);
         return AlertDialog(
           title: Text('Atualizar Tarefa'),
           content: TextField(
@@ -124,7 +134,9 @@ class _ListaTarefaPageState extends State<ListaTarefaPage> {
           IconButton(
             icon: Icon(Icons.filter_alt),
             onPressed: _toggleShowCompletedTasks,
-            tooltip: _showCompletedTasks ? 'Exibir todas as tarefas' : 'Exibir apenas tarefas concluídas',
+            tooltip: _showCompletedTasks
+                ? 'Exibir todas as tarefas'
+                : 'Exibir apenas tarefas concluídas',
           ),
           // Botão para fazer logout
           IconButton(
@@ -135,10 +147,14 @@ class _ListaTarefaPageState extends State<ListaTarefaPage> {
       ),
       body: ListView.builder(
         // Usamos um operador ternário para decidir quantas tarefas exibir com base no estado _showCompletedTasks
-        itemCount: _showCompletedTasks ? tasks.length : tasks.where((task) => !task.concluida).length,
+        itemCount: _showCompletedTasks
+            ? tasks.length
+            : tasks.where((task) => !task.concluida).length,
         itemBuilder: (context, index) {
           // Obtemos a lista de tarefas a serem exibidas com base no estado _showCompletedTasks
-          List<Tarefa> displayedTasks = _showCompletedTasks ? tasks : tasks.where((task) => !task.concluida).toList();
+          List<Tarefa> displayedTasks = _showCompletedTasks
+              ? tasks
+              : tasks.where((task) => !task.concluida).toList();
           // Obtemos a tarefa na lista filtrada pelo índice atual
           Tarefa task = displayedTasks[index];
           return ListTile(

@@ -3,8 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Classe para controlar as operações relacionadas às tarefas em SharedPreferences
 class ListaTarefaController {
-  final String email; // E-mail do usuário para diferenciar as chaves SharedPreferences
-  late SharedPreferences _prefs; // Objeto SharedPreferences para acessar os dados
+  final String
+      email; // E-mail do usuário para diferenciar as chaves SharedPreferences
+  late SharedPreferences
+      _prefs; // Objeto SharedPreferences para acessar os dados
 
   // Construtor da classe
   ListaTarefaController({required this.email});
@@ -16,14 +18,20 @@ class ListaTarefaController {
 
     // Obter a lista de tarefas e a lista de tarefas concluídas do SharedPreferences
     List<String>? taskList = _prefs.getStringList('${email}tasks');
-    List<String>? taskCompletedList = _prefs.getStringList('${email}tasks_completed');
+    List<String>? taskCompletedList =
+        _prefs.getStringList('${email}tasks_completed');
 
     // Verificar se as listas não são nulas e têm o mesmo tamanho
-    if (taskList != null && taskCompletedList != null && taskList.length == taskCompletedList.length) {
+    if (taskList != null &&
+        taskCompletedList != null &&
+        taskList.length == taskCompletedList.length) {
       // Se forem válidas, criar uma lista de mapas contendo as tarefas e seus estados de conclusão
       List<Map<String, dynamic>> tasks = [];
       for (int i = 0; i < taskList.length; i++) {
-        tasks.add({'titulo': taskList[i], 'concluida': taskCompletedList[i] == 'true'});
+        tasks.add({
+          'titulo': taskList[i],
+          'concluida': taskCompletedList[i] == 'true'
+        });
       }
       return tasks; // Retornar a lista de tarefas
     } else {
@@ -43,7 +51,9 @@ class ListaTarefaController {
     // Preencher as listas com os dados das tarefas fornecidas
     for (int i = 0; i < tasks.length; i++) {
       taskList.add(tasks[i]['titulo']); // Adicionar o título da tarefa à lista
-      taskCompletedList.add(tasks[i]['concluida'] ? 'true' : 'false'); // Adicionar o estado de conclusão à lista
+      taskCompletedList.add(tasks[i]['concluida']
+          ? 'true'
+          : 'false'); // Adicionar o estado de conclusão à lista
     }
 
     // Salvar as listas no SharedPreferences usando chaves específicas para o usuário
