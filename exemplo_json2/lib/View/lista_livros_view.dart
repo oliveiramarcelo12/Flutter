@@ -1,7 +1,6 @@
 import 'package:exemplo_json2/Controller/livro_controller.dart';
+import 'package:exemplo_json2/View/info_livro_view.dart';
 import 'package:flutter/material.dart';
-
-import 'info_livro_view.dart';
 
 class LivrosPage extends StatefulWidget {
   const LivrosPage({super.key});
@@ -37,7 +36,8 @@ class _LivrosPageState extends State<LivrosPage> {
                               onTap: () => Navigator.push(
                                 context, 
                                 MaterialPageRoute(builder: (context) => 
-                                LivroInfoPage(info: controller.livros[index],),)
+                                LivroInfoPage(info:controller.livros[index])
+                                ,)
                               ),
                               );
                         }
