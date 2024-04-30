@@ -1,0 +1,25 @@
+ [
+    {
+       
+        "titulo": " O Fim da eternidade ",
+        "autor":"Isac Asimov",
+        "sinopse": "O fim da eternidade é um livro de ficção científica escrito por Isac Asimov, publicado em 1985.",
+        "categoria": "Ficção Científica",
+        "isbn": "9788521603065"
+
+    },
+    {
+        "titulo":"O Morro dos ventos Uivantes",
+        "autor":"Emily Bronte",
+        "sinopse":"O Morro dos ventos Uivantes é um livro de ficção escrito por",
+        "categoria":"Terror",
+        "isbn":"9788521603045"
+    },
+    {
+        "titulo":"Mémorias Póstumas de Brás Cubas",
+        "autor":"Machado de Assis",
+        "sinopse":"Mémorias Póstumas de Brás Cubas é um livro de ficção escrito por",
+        "categoria":"Romance Realista",
+        "isbn":"9788521603067"
+    }
+ ]
