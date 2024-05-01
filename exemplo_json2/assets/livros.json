@@ -22,5 +22,29 @@
         "categoria": "Romance Realista",
         "isbn": 9788521603067,
         "capa":"assets/img/img03.jpg"
+    },
+    {
+        "titulo": "O Senhor dos Anéis",
+        "autor": "J.R.R Tolkien",
+        "sinopse": "O Senhor dos Anéis é um livro de ficção escrito por",
+        "categoria": "Ficção Científica",
+        "isbn": 9788521603065,
+        "capa":"assets/img/img04.jpg"
+    },
+    {
+        "titulo": "Lupin",
+        "autor": "Maurice Leblanc",
+        "sinopse": "O Senhor dos Anéis é um livro de ficção escrito por",
+        "categoria": "Ficção Científica",
+        "isbn": 9788521603065,
+        "capa":"assets/img/img05.jpg"
+    },
+    {
+        "titulo": "Crônicas de Nárnia",
+        "autor": "C.S Lewis",
+        "sinopse": "O Senhor dos Anéis é um livro de ficção escrito por",
+        "categoria": "Ficção Científica",
+        "isbn": 9788521603065,
+        "capa":"assets/img/img06.jpg"
     }
 ]

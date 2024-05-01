@@ -31,6 +31,12 @@ class _LivrosPageState extends State<LivrosPage> {
                         itemCount: controller.livros.length,
                         itemBuilder: (context, index) {
                           return ListTile(
+                            leading: Image.asset(
+                              controller.livros[index].capa,
+                              height: 35,
+                              width: 35,
+                              fit: BoxFit.cover,
+                            ),
                               title: Text(controller.livros[index].titulo),
                               subtitle: Text(controller.livros[index].autor),
                               onTap: () => Navigator.push(
