@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/listar':(context) => CarrosListarScreen(),
-        '/cadastar':(context) => CarroCadastroScreen()
+        '/cadastrar':(context) => CarroCadastroScreen()
       },
       
     );
