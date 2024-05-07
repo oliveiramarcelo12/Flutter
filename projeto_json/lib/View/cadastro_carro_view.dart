@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:projeto_json/Controller/carros_controller.dart';
+
+import '../Model/carros_model.dart';
 
 class CarroCadastroScreen extends StatefulWidget {
   const CarroCadastroScreen({super.key});
@@ -154,7 +157,56 @@ class _CarroCadastroScreenState extends State<CarroCadastroScreen> {
       });
     }
   }
- void _cadastrarCarro() {
+
+  Carro criarObjeto() {
+    return Carro(
+      placa: _placaController.text,
+      modelo: _modeloController.text,
+      marca: _marcaController.text,
+      ano: int.parse(_anoController.text),
+      cor: _corController.text,
+      descricao: _descricaoController.text,
+      valor: double.parse(_valorController.text),
+      foto: _imagemSelecionada!.path,
+    );
+  }
+
+  CarrosController _controller = new CarrosController();
+void _limparValores(){
+  _placaController.clear();
+  _modeloController.clear();
+  _marcaController.clear();
+  _anoController.clear();
+  _corController.clear();
+  _descricaoController.clear();
+  _valorController.clear();
+  _imagemSelecionada = null;
+}
+void _apagarCampos(){
+  _placaController.text= "";
+  _modeloController.text= "";
+  _marcaController.text= "";
+  _anoController.text= "";
+  _corController.text= "";
+  _descricaoController.text= "";
+  _valorController.text= "";
+  _imagemSelecionada = null;
+ 
+
+
+}
+  void _cadastrarCarro() {
+    
     //cadastrar
+    _controller.addCarro(criarObjeto());
+    //limpar os campos
+    _limparValores();
+    _apagarCampos();
+
+     ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Carro Cadastrado com Sucesso"),
+      ),
+    );
   }
 }
