@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:projeto_json/Controller/carros_controller.dart';
+import 'info_carro_view.dart'; // Importe a página de informações do carro
 
 class CarrosListarScreen extends StatefulWidget {
   const CarrosListarScreen({Key? key}) : super(key: key);
@@ -36,12 +37,22 @@ class _CarrosListarScreenState extends State<CarrosListarScreen> {
                 itemCount: controller.carroList.length,
                 itemBuilder: (context, index) {
                   // Convert the foto string path to a File object
-                  File fotoFile =
-                      File(controller.carroList[index].foto);
-                  return ListTile(
-                    leading: Image.file(fotoFile),
-                    title: Text(controller.carroList[index].modelo),
-                    subtitle: Text(controller.carroList[index].marca),
+                  File fotoFile = File(controller.carroList[index].foto);
+                  return GestureDetector(
+                    onTap: () {
+                      // Navegar para a página de informações do carro quando clicar
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CarroInfoPage(carro: controller.carroList[index]),
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      leading: Image.file(fotoFile),
+                      title: Text(controller.carroList[index].modelo),
+                      subtitle: Text(controller.carroList[index].marca),
+                    ),
                   );
                 },
               );

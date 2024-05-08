@@ -27,6 +27,7 @@ class _CarroCadastroScreenState extends State<CarroCadastroScreen> {
   CarrosController _controller = CarrosController();
   @override
   void initState() {
+    super.initState();
     _controller.loadCarrosFromFile();
   }
 
