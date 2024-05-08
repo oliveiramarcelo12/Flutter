@@ -13,6 +13,7 @@ class CarrosController {
   }
 
   void addCarro(Carro carro) {
+    loadCarrosFromFile();
     _carroList.add(carro);
     saveCarrosToFile();
   }
@@ -27,7 +28,7 @@ class CarrosController {
   }
   //Buscar do Json(upload)
 
- Future<void> loadCarrosFromFile() async {
+  Future<void> loadCarrosFromFile() async {
     try {
       Directory appDocDir = await getApplicationDocumentsDirectory();
       String path = appDocDir.path;

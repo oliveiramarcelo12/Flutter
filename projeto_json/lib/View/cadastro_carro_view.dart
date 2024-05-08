@@ -24,6 +24,12 @@ class _CarroCadastroScreenState extends State<CarroCadastroScreen> {
   TextEditingController _valorController = TextEditingController();
   File? _imagemSelecionada;
 
+  CarrosController _controller = CarrosController();
+  @override
+  void initState() {
+    _controller.loadCarrosFromFile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,39 +177,38 @@ class _CarroCadastroScreenState extends State<CarroCadastroScreen> {
     );
   }
 
-  CarrosController _controller = new CarrosController();
-void _limparValores(){
-  _placaController.clear();
-  _modeloController.clear();
-  _marcaController.clear();
-  _anoController.clear();
-  _corController.clear();
-  _descricaoController.clear();
-  _valorController.clear();
-  _imagemSelecionada = null;
-}
-void _apagarCampos(){
-  _placaController.text= "";
-  _modeloController.text= "";
-  _marcaController.text= "";
-  _anoController.text= "";
-  _corController.text= "";
-  _descricaoController.text= "";
-  _valorController.text= "";
-  _imagemSelecionada = null;
- 
+  void _limparValores() {
+    _placaController.clear();
+    _modeloController.clear();
+    _marcaController.clear();
+    _anoController.clear();
+    _corController.clear();
+    _descricaoController.clear();
+    _valorController.clear();
+    _imagemSelecionada = null;
+  }
 
+  void _apagarCampos() {
+    _placaController.text = "";
+    _modeloController.text = "";
+    _marcaController.text = "";
+    _anoController.text = "";
+    _corController.text = "";
+    _descricaoController.text = "";
+    _valorController.text = "";
+    _imagemSelecionada = null;
+  }
 
-}
   void _cadastrarCarro() {
-    
     //cadastrar
     _controller.addCarro(criarObjeto());
+    //salvar
+    _controller.saveCarrosToFile();
     //limpar os campos
     _limparValores();
     _apagarCampos();
 
-     ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("Carro Cadastrado com Sucesso"),
       ),
