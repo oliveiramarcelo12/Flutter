@@ -200,19 +200,41 @@ class _CarroCadastroScreenState extends State<CarroCadastroScreen> {
     _imagemSelecionada = null;
   }
 
-  void _cadastrarCarro() {
-    //cadastrar
-    _controller.addCarro(criarObjeto());
-    //salvar
-    _controller.saveCarrosToFile();
-    //limpar os campos
-    _limparValores();
-    _apagarCampos();
-
+ void _cadastrarCarro() {
+  // Verificar se a placa já existe na lista de carros
+  if (_placaExiste(_placaController.text)) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Carro Cadastrado com Sucesso"),
+        content: Text('Esta placa já está cadastrada.'),
       ),
     );
+    return; // Impedir o cadastro se a placa já existe
   }
+
+  // Cadastrar o carro
+  _controller.addCarro(criarObjeto());
+  // Salvar os carros no arquivo
+  _controller.saveCarrosToFile();
+  // Limpar os campos do formulário
+  _limparValores();
+  _apagarCampos();
+
+  // Exibir uma mensagem de sucesso
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Carro cadastrado com sucesso.'),
+    ),
+  );
+}
+
+bool _placaExiste(String placa) {
+  // Verificar se a placa já existe na lista de carros
+  for (var carro in _controller.carroList) {
+    if (carro.placa == placa) {
+      return true;
+    }
+  }
+  return false;
+}
+
 }

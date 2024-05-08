@@ -37,17 +37,16 @@ class _LivrosPageState extends State<LivrosPage> {
                               width: 35,
                               fit: BoxFit.cover,
                             ),
-                              title: Text(controller.livros[index].titulo),
-                              subtitle: Text(controller.livros[index].autor),
-                              onTap: () => Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => 
-                                LivroInfoPage(info:controller.livros[index])
-                                ,)
-                              ),
-                              );
-                        }
-                        );
+                            title: Text(controller.livros[index].titulo),
+                            subtitle: Text(controller.livros[index].autor),
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LivroInfoPage(
+                                      info: controller.livros[index]),
+                                )),
+                          );
+                        });
                   }
                 })),
       ),
