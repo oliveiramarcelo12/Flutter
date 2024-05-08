@@ -6,37 +6,56 @@ import 'package:path_provider/path_provider.dart';
 import '../Model/carros_model.dart';
 
 class CarrosController {
-  List<Carro> _carroList = [];
-
-  List<Carro> get carroList {
-    return _carroList;
-  }
+  List<Carro> carroList = [];
 
   void addCarro(Carro carro) {
-    loadCarrosFromFile();
-    _carroList.add(carro);
-    saveCarrosToFile();
+    carroList.add(carro);
   }
 
-  //Salvar para o json(load)
+  //Salva para o Json
   Future<void> saveCarrosToFile() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String path = appDocDir.path;
-    final file = File('${path}/carros.json');
-    final jsonList = _carroList.map((carro) => carro.toJson()).toList();
+    final file = File('$path/carros.json');
+    final jsonList = carroList.map((carro) => carro.toJson()).toList();
     await file.writeAsString(jsonEncode(jsonList));
   }
-  //Buscar do Json(upload)
 
+  //Buscar do Json
   Future<void> loadCarrosFromFile() async {
     try {
       Directory appDocDir = await getApplicationDocumentsDirectory();
       String path = appDocDir.path;
       final file = File('$path/carros.json');
       final jsonList = jsonDecode(await file.readAsString());
-      _carroList = jsonList.map<Carro>((json) => Carro.fromJson(json)).toList();
+      carroList = jsonList.map<Carro>((json) => Carro.fromJson(json)).toList();
     } catch (e) {
-      _carroList = [];
+      carroList = [];
+    }
+  }
+
+  // Upload do json
+  Future<void> uploadCarrosfromFile(List<Carro> carros) async {
+    try {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String path = appDocDir.path;
+      final file = File('$path/carros.json');
+      final jsonList = carros.map((carro) => carro.toJson()).toList();
+      await file.writeAsString(jsonEncode(jsonList));
+    } catch (e) {
+      print('Erro ao fazer upload do arquivo: $e');
+    }
+  }
+
+  // Deletar do json
+  Future<void> deleteCarrosfromFile() async {
+    try {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String path = appDocDir.path;
+      final file = File('$path/carros.json');
+      await file.delete();
+    } catch (e) {
+      print('Erro ao deletar arquivo: $e');
     }
   }
 }
