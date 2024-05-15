@@ -1,50 +1,79 @@
 import 'package:flutter/material.dart';
-
+import 'package:geolocator/geolocator.dart';
 import 'service.dart';
 
 class WeatherScreen extends StatefulWidget {
-  const WeatherScreen({super.key});
+  const WeatherScreen({Key? key}) : super(key: key);
 
   @override
   State<WeatherScreen> createState() => _WeatherScreenState();
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-    final TextEditingController _cityController = TextEditingController();
-  // Instância do serviço WeatherService para obter os dados de previsão do tempo.
   final WeatherService _weatherService = WeatherService(
-    apiKey:
-        '681126f28e7d6fa3a7cfe0da0671e599', // Chave de API para acesso à API de previsão do tempo.
-    baseUrl:
-        'https://api.openweathermap.org/data/2.5', // URL base da API de previsão do tempo.
+    apiKey: 'b9ebe666087f299f5e2aad3a03d093b6',
+    baseUrl: 'https://api.openweathermap.org/data/2.5',
   );
 
-  // Mapa que armazenará os dados de previsão do tempo.
-  late Map<String, dynamic> _weatherData;
+  final TextEditingController _cityController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  late Map<String, dynamic> _weatherData = {};
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _weatherData = new Map<String, dynamic>();
+  void dispose() {
+    _cityController.dispose();
+    super.dispose();
   }
 
-  // Método assíncrono para buscar os dados de previsão do tempo para uma cidade específica.
   Future<void> _fetchWeatherData(String city) async {
     try {
-      // Obtém os dados de previsão do tempo para a cidade especificada.
       final weatherData = await _weatherService.getWeather(city);
-      // Atualiza o estado do widget com os novos dados de previsão do tempo.
       setState(() {
         _weatherData = weatherData;
       });
     } catch (e) {
-      // Em caso de erro ao buscar os dados de previsão do tempo, exibe uma mensagem de erro no console.
       print(e);
     }
   }
 
-  
+  Future<void> _fetchWeatherLocation() async {
+    try{
+      Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy : LocationAccuracy.high
+    );
+    final weatherData= await _weatherService.getWeatherByLocation(position.latitude,position.longitude);
+    setState(() {
+      _weatherData =weatherData;
+    });
+    }catch
+    
+  }
+
+  String _translateDescription(String description) {
+    switch (description.toLowerCase()) {
+      case 'clear sky':
+        return 'céu limpo';
+      case 'few clouds':
+        return 'poucas nuvens';
+      case 'scattered clouds':
+        return 'nuvens esparsas';
+      case 'broken clouds':
+        return 'céu nublado';
+      case 'shower rain':
+        return 'chuva de banho';
+      case 'rain':
+        return 'chuva';
+      case 'thunderstorm':
+        return 'trovoada';
+      case 'snow':
+        return 'neve';
+      case 'mist':
+        return 'névoa';
+      default:
+        return description;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,8 +81,33 @@ class _WeatherScreenState extends State<WeatherScreen> {
         title: Text("Exemplo Weather-API"),
       ),
       body: Padding(
-       padding: EdgeInsets.all(12),
-       child: Center,
+        padding: const EdgeInsets.all(12),
+       child: FutureBuilder(
+        future: _fetchWeatherLocation(),
+        builder: (context,snapshot){
+          if (_weatherData.isEmpty) {
+            return Center(child: CircularProgressIndicator());
+          }else{
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                      Text(
+                        'Cidade: ${_weatherData['name']}',
+                      ),
+                      Text(
+                        'Temperatura: ${(_weatherData['main']['temp'] - 273.15).toInt()} °C',
+                      ),
+                      Text(
+                        'Descrição: ${_translateDescription(_weatherData['weather'][0]['description'])}',
+                      ),
+                    ],
+              )
+            )
+          }
+        }
+        
+       ),
       ),
     );
   }
