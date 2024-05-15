@@ -37,16 +37,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Future<void> _fetchWeatherLocation() async {
-    try{
+    try {
       Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy : LocationAccuracy.high
-    );
-    final weatherData= await _weatherService.getWeatherByLocation(position.latitude,position.longitude);
-    setState(() {
-      _weatherData =weatherData;
-    });
-    }catch
-    
+          desiredAccuracy: LocationAccuracy.high);
+      final weatherData = await _weatherService.getWeatherByLocation(
+          position.latitude, position.longitude);
+      setState(() {
+        _weatherData = weatherData;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   String _translateDescription(String description) {
@@ -82,32 +83,31 @@ class _WeatherScreenState extends State<WeatherScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
-       child: FutureBuilder(
-        future: _fetchWeatherLocation(),
-        builder: (context,snapshot){
-          if (_weatherData.isEmpty) {
-            return Center(child: CircularProgressIndicator());
-          }else{
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                      Text(
-                        'Cidade: ${_weatherData['name']}',
-                      ),
-                      Text(
-                        'Temperatura: ${(_weatherData['main']['temp'] - 273.15).toInt()} °C',
-                      ),
-                      Text(
-                        'Descrição: ${_translateDescription(_weatherData['weather'][0]['description'])}',
-                      ),
-                    ],
-              )
-            )
-          }
-        }
-        
-       ),
+        child: FutureBuilder(
+          future: _fetchWeatherLocation(),
+          builder: (context, snapshot) {
+            if (_weatherData.isEmpty) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Cidade: ${_weatherData['name']}',
+                    ),
+                    Text(
+                      'Temperatura: ${(_weatherData['main']['temp'] - 273.15).toInt()} °C',
+                    ),
+                    Text(
+                      'Descrição: ${_translateDescription(_weatherData['weather'][0]['description'])}',
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }
