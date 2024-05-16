@@ -21,10 +21,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _getWeatherInit() async {
     try {
+
       Position position = await Geolocator.getCurrentPosition();
+      
+      print(position.latitude);
       _weatherData = await _weatherService.getWeatherByLocation(
           position.latitude, position.longitude);
       setState(() {});
+      print("Localização ok");
     } catch (e) {
       print(e);
     }
