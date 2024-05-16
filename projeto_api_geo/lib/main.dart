@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'View/favorito_screen.dart';
+import 'View/historic_screen.dart';
 import 'View/home_screen.dart';
 
 void main() {
