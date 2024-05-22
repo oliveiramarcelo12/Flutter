@@ -3,7 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:projeto_api_geo/Controller/weather_controller.dart';
 
 class DetailsWeatherScreen extends StatefulWidget {
-  const DetailsWeatherScreen({super.key});
+  final String city;
+  const DetailsWeatherScreen({super.key, required this.city});
+
 
   @override
   State<DetailsWeatherScreen> createState() => _DetailsWeatherScreenState();
@@ -11,6 +13,12 @@ class DetailsWeatherScreen extends StatefulWidget {
 
 class _DetailsWeatherScreenState extends State<DetailsWeatherScreen> {
   final WeatherController _controller = WeatherController();
+  
+  @override
+  void initState() {
+    super.initState();
+    _controller.getWeather(widget.city);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +28,12 @@ class _DetailsWeatherScreenState extends State<DetailsWeatherScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
-          child:Column(
+          child: _controller.weatherList.isEmpty 
+          ?
+          Text("Erro de Conexão"),
+          I
+          :
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children:[
               Row(

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes:{
         '/search':(context) => const SearchScreen(),
-        '/details':(context) => const DetailsWeatherScreen()
+        
         
       } ,
     );
