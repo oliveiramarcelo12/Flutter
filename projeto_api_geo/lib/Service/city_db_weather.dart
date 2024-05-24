@@ -9,7 +9,7 @@ class CityDataBaseService {
       """CREATE TABLE cities(
         id SERIAL, 
         cityname TEXT, 
-        favoritecities BOOLEAN default false)""";
+        favoritecities BOOLEAN )""";
 
   Future<Database> _getDatabase() async{
     return openDatabase(
@@ -37,5 +37,18 @@ class CityDataBaseService {
   Future<int> insertCity(City city) async {
     Database db = await _getDatabase();
     return await db.insert(TABLE_NOME, city.toMap());
-  }    
+  } 
+   //update
+  Future<void> updateCity(City city) async {
+    try {
+      Database db = await _getDatabase();
+      print("banco");
+      db.update(TABLE_NOME, city.toMap(), 
+        where: "cityname =?", 
+        whereArgs: [city.cityName]
+        );
+    } catch (e) {
+      print(e);
+    }
+  }  
 }
