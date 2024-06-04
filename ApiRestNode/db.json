@@ -1,0 +1,73 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nome": "João",
+      "email": "joao@exemplo.com"
+    },
+    {
+      "id": "2",
+      "nome": "Maria",
+      "email": "maria@exemplo.com"
+    },
+    {
+      "id": "3",
+      "nome": "Pedro",
+      "email": "pedro3@exemplo.com"
+    },
+    {
+      "id": "4",
+      "nome": "Ana",
+      "email": "ana@exemplo.com"
+    },
+    {
+      "id": "5",
+      "nome": "Carlos",
+      "email": "carlos@exemplo.com"
+    }
+  ],
+  "produtos": [
+    {
+      "id": "1",
+      "nome": "Smartphone Samsung Galaxy S21",
+      "codigo": "SGS21",
+      "preco": 3500,
+      "descricao": "Smartphone Samsung Galaxy S21 com 128GB, 8GB RAM, Tela de 6.2 polegadas e Câmera Tripla de 64MP."
+    },
+    {
+      "id": "2",
+      "nome": "Notebook Dell Inspiron 15",
+      "codigo": "NDI15",
+      "preco": 4500,
+      "descricao": "Notebook Dell Inspiron 15 com Intel Core i7, 16GB RAM, 512GB SSD e Tela de 15.6 polegadas Full HD."
+    },
+    {
+      "id": "3",
+      "nome": "Smart TV LG 55\" 4K UHD",
+      "codigo": "STLG55",
+      "preco": 3000,
+      "descricao": "Smart TV LG 55 polegadas 4K UHD com HDR, webOS e Inteligência Artificial ThinQ AI."
+    },
+    {
+      "id": "4",
+      "nome": "Tablet Apple iPad Air",
+      "codigo": "TAIA",
+      "preco": 3800,
+      "descricao": "Tablet Apple iPad Air com 64GB, Tela de 10.9 polegadas Liquid Retina e Chip A14 Bionic."
+    },
+    {
+      "id": "5",
+      "nome": "Console Sony PlayStation 5",
+      "codigo": "CSP5",
+      "preco": 5000,
+      "descricao": "Console Sony PlayStation 5 com SSD ultrarrápido, suporte a jogos em 4K e Ray Tracing."
+    },
+    {
+      "id": "6",
+      "nome": "Fone de Ouvido Bluetooth Sony WH-1000XM4",
+      "codigo": "FOSW1000XM4",
+      "preco": 1500,
+      "descricao": "Fone de Ouvido Bluetooth Sony WH-1000XM4 com Cancelamento de Ruído Ativo e 30 horas de bateria."
+    }
+  ]
+}
