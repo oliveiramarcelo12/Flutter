@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "823859519212",
+    "project_id": "teste-firebase-3d7ff",
+    "storage_bucket": "teste-firebase-3d7ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823859519212:android:71789fb7ede1ffa6ae0fc9",
+        "android_client_info": {
+          "package_name": "br.com.marcelo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823859519212-h4u7nvipamsj67jvnjcnah52vfqe5sh0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBglp_0_GgjpGXAzU0YsmpmgQMVtS_7jFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823859519212-h4u7nvipamsj67jvnjcnah52vfqe5sh0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
