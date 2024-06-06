@@ -40,4 +40,8 @@ class AuthService {
       print(e.toString());
     }
   }
+
+    Future<void> logout() async {
+    await _auth.signOut();
+  }
 }
