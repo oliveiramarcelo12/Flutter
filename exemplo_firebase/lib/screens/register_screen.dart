@@ -14,7 +14,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _service = AuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmedPasswordController = TextEditingController();
+  final TextEditingController _confirmedPasswordController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -23,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-           colors: [Colors.blueAccent, Colors.lightBlueAccent],
+            colors: [Colors.blueAccent, Colors.lightBlueAccent],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -55,7 +56,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
                       ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -78,7 +80,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
                       ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                     ),
                     obscureText: true,
                     validator: (value) {
@@ -102,7 +105,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
                       ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                     ),
                     obscureText: true,
                     validator: (value) {
@@ -118,8 +122,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                     foregroundColor: Colors.blueAccent, backgroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                      foregroundColor: Colors.blueAccent,
+                      backgroundColor: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -142,14 +148,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
- Future<User?> _registrarUser() async {
-    if(_formKey.currentState!.validate()){
-      if(_passwordController.text==_confirmedPasswordController.text){
-        return await _service.registerUsuario(
-          _emailController.text, 
+  Future<void> _registrarUser() async {
+    if (_formKey.currentState!.validate()) {
+      if (_passwordController.text == _confirmedPasswordController.text) {
+       
+        await _service.registerUsuario(
+              _emailController.text, 
           _confirmedPasswordController.text);
-          //navegação para págian interna
-      }else{
+        Navigator.pushNamed(context, '/login');
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('As senhas não conferem!'),
@@ -157,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
         _passwordController.clear();
         _confirmedPasswordController.clear();
-        return null;
+       
       }
     }
   }
