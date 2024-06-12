@@ -69,5 +69,21 @@
       "preco": 1500,
       "descricao": "Fone de Ouvido Bluetooth Sony WH-1000XM4 com Cancelamento de Ruído Ativo e 30 horas de bateria."
     }
+  ],
+  "audios":[
+    {
+      "id": "1",
+      "title":"Wataridori 2",
+      "artist":"Cornélio",
+      "url":"http://www.dominiopublico.gov.br/download/som/Cornelius%20-%20Wataridori%202.mp3",
+      "imageUrl":"http://www.dominiopublico.gov.br/download/imagem/wm000005.jpg"
+    },
+    {
+      "id": "2",
+      "title":"At the Moving Picture Ball ",
+      "artist":"Maurice Burkhart",
+      "url":"http://www.dominiopublico.gov.br/download/som/gu10307.mp3",
+         "imageUrl":"http://www.dominiopublico.gov.br/download/imagem/uf000003.jpg"
+    }
   ]
 }
