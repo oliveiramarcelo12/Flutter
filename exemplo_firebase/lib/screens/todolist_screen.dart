@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:exemplo_firebase/models/todolist.dart';
 import 'package:exemplo_firebase/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,7 +29,7 @@ class _TodolistScreenState extends State<TodolistScreen> {
   Future<void> _getList() async {
     try {
       await _controller.fetchList(widget.user.uid);
-      setState(() {});
+      setState(() {}); // Atualizar o estado após buscar a lista
     } catch (e) {
       print(e.toString());
     }
@@ -60,6 +61,8 @@ class _TodolistScreenState extends State<TodolistScreen> {
                 return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
+              } else if (_controller.list.isEmpty) {
+                return const Text('Nenhuma tarefa encontrada');
               } else {
                 return ListView.builder(
                   itemCount: _controller.list.length,
@@ -106,10 +109,10 @@ class _TodolistScreenState extends State<TodolistScreen> {
                     onPressed: () async {
                       Navigator.of(context).pop();
                       Todolist add = Todolist(
-                        id: (_controller.list.length + 1).toString(),
+                        id: '', // Deixe o Firestore gerar o ID
                         titulo: _tituloController.text,
                         userId: widget.user.uid,
-                        timestamp: DateTime.now(),
+                        timestamp: Timestamp.now(), // Usa Timestamp em vez de DateTime
                       );
                       await _controller.add(add);
                       _tituloController.clear();
