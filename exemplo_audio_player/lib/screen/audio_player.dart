@@ -7,10 +7,10 @@ class AudioPlayerScreen extends StatefulWidget {
   final int initialIndex;
 
   const AudioPlayerScreen({
-    super.key,
+    Key? key,
     required this.audioList,
     this.initialIndex = 0,
-  });
+  }) : super(key: key);
 
   @override
   State<AudioPlayerScreen> createState() => _AudioPlayerScreenState();
@@ -37,12 +37,14 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     });
 
     _audioPlayer.onPositionChanged.listen((Duration position) {
+      print('Current Position: $position');
       setState(() {
         _currentPosition = position;
       });
     });
 
     _audioPlayer.onDurationChanged.listen((Duration duration) {
+      print('Total Duration: $duration');
       setState(() {
         _totalDuration = duration;
       });

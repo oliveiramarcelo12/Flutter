@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:exemplo_audio_player/screens/home_screen.dart';
+
+import 'screen/home_screen.dart';
+
+
+
 
 void main() {
   runApp(const MyApp());
