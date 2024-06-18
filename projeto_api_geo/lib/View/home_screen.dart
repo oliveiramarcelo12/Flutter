@@ -20,11 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _getWeatherInit();
   }
 
-  Future<void> _getWeatherInit() async {
+  Future <void> _getWeatherInit() async{
     try {
       Position position = await Geolocator.getCurrentPosition();
-      _controller.getWeatherbyLocation(position.latitude, position.longitude);
-      setState(() {});
+      _controller.getWeatherbyLocation(
+        position.latitude, position.longitude
+        );
+      setState(() {
+      });
     } catch (e) {
       print(e);
     }
@@ -51,17 +54,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/search');
-                        },
-                        child: const Text("Pesquisar")),
+                        onPressed: () {Navigator.pushNamed(context,'/search');}, 
+                        child: const Text("Pesquisa")),
                     ElevatedButton(
                         onPressed: () {}, child: const Text("Favoritos"))
                   ],
                 ),
                 const SizedBox(height: 20),
-                _controller.weatherList.isEmpty
+                    _controller.weatherList.isEmpty
                     ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("Erro de Conexão"),
                           IconButton(
@@ -80,8 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 10),
                           Text(_controller.weatherList.last.description),
                           const SizedBox(height: 10),
-                          Text((_controller.weatherList.last.temp - 273)
-                              .toStringAsFixed(2)),
+                          Text((_controller.weatherList.last.temp-273).toStringAsFixed(2)),
                           IconButton(
                             icon: const Icon(Icons.refresh),
                             onPressed: () {
