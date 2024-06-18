@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_api_geo/Controller/weather_controller.dart';
 import 'package:projeto_api_geo/Service/city_db_service.dart';
+import 'package:projeto_api_geo/Service/favorites_service.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import '../Model/city_model.dart';
@@ -16,6 +17,7 @@ class DetailsWeatherScreen extends StatefulWidget {
 class _DetailsWeatherScreenState extends State<DetailsWeatherScreen> {
   final WeatherController _controller = WeatherController();
   final CityDataBaseService _dbService = CityDataBaseService();
+  final FavoritesService _favoritesService = FavoritesService();
 
   final Map<String, String> weatherTranslations = {
     "clear sky": "Céu limpo",
@@ -110,8 +112,12 @@ class _DetailsWeatherScreenState extends State<DetailsWeatherScreen> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.favorite),
-                            onPressed: () {
-                              //criar método para favoritar
+                            onPressed: () async {
+                              final city = City(cityName: weather.name, favoriteCities: 1);
+                              await _favoritesService.addFavorite(city);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('${weather.name} foi adicionado aos favoritos.')),
+                              );
                             },
                           )
                         ],
