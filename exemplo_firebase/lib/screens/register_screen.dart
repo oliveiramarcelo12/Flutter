@@ -1,13 +1,11 @@
 import 'package:exemplo_firebase/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'todolist_screen.dart'; // Importa a DashboardScreen
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -139,6 +137,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Volta para a tela de login
+                    },
+                    child: Text(
+                      'Já tem registro? Entre na sua conta',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -151,10 +161,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _registrarUser() async {
     if (_formKey.currentState!.validate()) {
       if (_passwordController.text == _confirmedPasswordController.text) {
-       
         await _service.registerUsuario(
-              _emailController.text, 
-          _confirmedPasswordController.text);
+          _emailController.text,
+          _confirmedPasswordController.text,
+        );
         Navigator.pushNamed(context, '/login');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -164,7 +174,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
         _passwordController.clear();
         _confirmedPasswordController.clear();
-       
       }
     }
   }

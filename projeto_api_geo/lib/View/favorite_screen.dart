@@ -26,6 +26,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     });
   }
 
+  void _removeFavorite(City city) async {
+    await _favoritesService.removeFavorite(city);
+    _loadFavorites();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,8 +48,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () async {
-                      await _favoritesService.removeFavorite(city);
-                      _loadFavorites();
+                      _removeFavorite(city);
                     },
                   ),
                 );

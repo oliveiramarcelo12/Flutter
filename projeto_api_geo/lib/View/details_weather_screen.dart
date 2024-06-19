@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_api_geo/Controller/weather_controller.dart';
-import 'package:projeto_api_geo/Service/city_db_service.dart';
 import 'package:projeto_api_geo/Service/favorites_service.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -8,7 +7,13 @@ import '../Model/city_model.dart';
 
 class DetailsWeatherScreen extends StatefulWidget {
   final String city;
-  const DetailsWeatherScreen({super.key, required this.city});
+  final VoidCallback onFavoritesUpdated;
+
+  const DetailsWeatherScreen({
+    super.key,
+    required this.city,
+    required this.onFavoritesUpdated,
+  });
 
   @override
   State<DetailsWeatherScreen> createState() => _DetailsWeatherScreenState();
@@ -16,8 +21,8 @@ class DetailsWeatherScreen extends StatefulWidget {
 
 class _DetailsWeatherScreenState extends State<DetailsWeatherScreen> {
   final WeatherController _controller = WeatherController();
-  final CityDataBaseService _dbService = CityDataBaseService();
   final FavoritesService _favoritesService = FavoritesService();
+  bool isFavorite = false; // Variável de estado para controlar se é favorito
 
   final Map<String, String> weatherTranslations = {
     "clear sky": "Céu limpo",
@@ -67,12 +72,25 @@ class _DetailsWeatherScreenState extends State<DetailsWeatherScreen> {
       case 'mist':
         return WeatherIcons.fog;
       default:
-        return WeatherIcons.day_sunny; // Default icon for unrecognized descriptions
+        return WeatherIcons.day_sunny;
     }
   }
 
   Color getBackgroundColor(String description) {
     return weatherBackgroundColors[description.toLowerCase()] ?? Colors.blue;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFavorite();
+  }
+
+  Future<void> _checkFavorite() async {
+    final favorite = await _favoritesService.isFavorite(City(cityName: widget.city, favoriteCities: 0));
+    setState(() {
+      isFavorite = favorite;
+    });
   }
 
   @override
@@ -107,17 +125,34 @@ class _DetailsWeatherScreenState extends State<DetailsWeatherScreen> {
                         children: [
                           Text(
                             weather.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.favorite),
+                            icon: Icon(
+                              isFavorite ? Icons.favorite : Icons.favorite_border,
+                              color: isFavorite ? Colors.red : Colors.white,
+                            ),
                             onPressed: () async {
-                              final city = City(cityName: weather.name, favoriteCities: 1);
-                              await _favoritesService.addFavorite(city);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('${weather.name} foi adicionado aos favoritos.')),
-                              );
+                              if (isFavorite) {
+                                await _favoritesService.removeFavorite(City(cityName: weather.name, favoriteCities: 0));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Cidade removida dos favoritos.'),
+                                  ),
+                                );
+                              } else {
+                                await _favoritesService.addFavorite(City(cityName: weather.name, favoriteCities: 0));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Cidade adicionada aos favoritos.'),
+                                  ),
+                                );
+                              }
+                              setState(() {
+                                isFavorite = !isFavorite; // Inverte o estado de favorito
+                              });
+                              widget.onFavoritesUpdated();
                             },
                           )
                         ],
@@ -129,11 +164,11 @@ class _DetailsWeatherScreenState extends State<DetailsWeatherScreen> {
                       ),
                       Text(
                         translateWeather(weather.description),
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
                       ),
                       Text(
                         'Temperatura: ${(weather.temp - 273).toStringAsFixed(2)}°C',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ],
                   ),

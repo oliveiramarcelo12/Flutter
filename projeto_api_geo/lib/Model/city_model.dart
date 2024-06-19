@@ -1,23 +1,20 @@
 class City {
-  //atributos
   final String cityName;
   final int favoriteCities;
-  //cosntrutor
+
   City({required this.cityName, required this.favoriteCities});
-  //metodos
-  
-  //toMap
-  Map<String,dynamic> toMap() {
+
+  Map<String, dynamic> toMap() {
     return {
-    'cityname': cityName,
-    'favoritecities': favoriteCities};
+      'cityname': cityName.toLowerCase(), // Ensure city names are stored in lowercase
+      'favoritecities': favoriteCities,
+    };
   }
 
-  //fromMap
-  factory City.fromMap(Map<String,dynamic> map ) {
+  static City fromMap(Map<String, dynamic> map) {
     return City(
       cityName: map['cityname'],
-      favoriteCities:map['favoritecities'],
+      favoriteCities: map['favoritecities'],
     );
   }
 }

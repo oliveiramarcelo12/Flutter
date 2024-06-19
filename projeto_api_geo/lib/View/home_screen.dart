@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:projeto_api_geo/Controller/weather_controller.dart';
-import 'package:projeto_api_geo/Service/weather_service_api.dart';
-import 'favorite_screen.dart';
+import 'package:weather_icons/weather_icons.dart';
 
+import 'favorite_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +14,62 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final WeatherController _controller = WeatherController();
+
+  final Map<String, String> weatherTranslations = {
+    "clear sky": "Céu limpo",
+    "few clouds": "Poucas nuvens",
+    "scattered clouds": "Nuvens dispersas",
+    "broken clouds": "Nuvens quebradas",
+    "shower rain": "Chuva de banho",
+    "rain": "Chuva",
+    "thunderstorm": "Trovoada",
+    "snow": "Neve",
+    "mist": "Névoa"
+  };
+
+  final Map<String, Color> weatherBackgroundColors = {
+    "clear sky": Colors.blue,
+    "few clouds": Colors.lightBlueAccent,
+    "scattered clouds": Colors.blueGrey,
+    "broken clouds": Colors.grey,
+    "shower rain": Colors.indigo,
+    "rain": Colors.blueAccent,
+    "thunderstorm": Colors.deepPurple,
+    "snow": Colors.white,
+    "mist": Colors.blueGrey[200]!,
+  };
+
+  String translateWeather(String description) {
+    return weatherTranslations[description.toLowerCase()] ?? description;
+  }
+
+  IconData getWeatherIcon(String description) {
+    switch (description.toLowerCase()) {
+      case 'clear sky':
+        return WeatherIcons.day_sunny;
+      case 'few clouds':
+        return WeatherIcons.day_cloudy;
+      case 'scattered clouds':
+      case 'broken clouds':
+        return WeatherIcons.cloud;
+      case 'shower rain':
+        return WeatherIcons.showers;
+      case 'rain':
+        return WeatherIcons.rain;
+      case 'thunderstorm':
+        return WeatherIcons.thunderstorm;
+      case 'snow':
+        return WeatherIcons.snow;
+      case 'mist':
+        return WeatherIcons.fog;
+      default:
+        return WeatherIcons.day_sunny; // Ícone padrão para descrições não reconhecidas
+    }
+  }
+
+  Color getBackgroundColor(String description) {
+    return weatherBackgroundColors[description.toLowerCase()] ?? Colors.blue;
+  }
 
   @override
   void initState() {
@@ -48,8 +104,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
                   onPressed: () {
@@ -69,36 +127,67 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            _controller.weatherList.isEmpty
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Erro de Conexão"),
-                      IconButton(
-                        icon: const Icon(Icons.refresh),
-                        onPressed: () {
-                          _getWeatherInit();
-                        },
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: _controller.weatherList.isEmpty
+                      ? Colors.white
+                      : getBackgroundColor(_controller.weatherList.last.description),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(20),
+                child: _controller.weatherList.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Erro de Conexão",
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.refresh),
+                              onPressed: () {
+                                _getWeatherInit();
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _controller.weatherList.last.name,
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                          const SizedBox(height: 10),
+                          Icon(
+                            getWeatherIcon(_controller.weatherList.last.description),
+                            size: 100.0,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            translateWeather(_controller.weatherList.last.description),
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'Temperatura: ${(_controller.weatherList.last.temp - 273).toStringAsFixed(2)}°C',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                          const SizedBox(height: 10),
+                          IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () {
+                              _getWeatherInit();
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Text(_controller.weatherList.last.name),
-                      const SizedBox(height: 10),
-                      Text(_controller.weatherList.last.main),
-                      const SizedBox(height: 10),
-                      Text(_controller.weatherList.last.description),
-                      const SizedBox(height: 10),
-                      Text((_controller.weatherList.last.temp - 273).toStringAsFixed(2)),
-                      IconButton(
-                        icon: const Icon(Icons.refresh),
-                        onPressed: () {
-                          _getWeatherInit();
-                        },
-                      ),
-                    ],
-                  ),
+              ),
+            ),
           ],
         ),
       ),
