@@ -1,6 +1,8 @@
-import 'package:exemplo_audio_player/models/audio_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+
+import '../model/audio_model.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
   final List<AudioModel> audioList;

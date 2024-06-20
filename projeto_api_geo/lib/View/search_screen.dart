@@ -24,6 +24,17 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadCities();
+  }
+
+  Future<void> _loadCities() async {
+    await _dbController.listCities(); // Carrega a lista de cidades ao iniciar
+    setState(() {}); // Atualiza a interface
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Pesquisa Por Cidade")),
@@ -46,7 +57,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -62,10 +75,12 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: _dbController.listCities(),
+                future: _dbController.listCities(), // Carrega a lista de cidades assincronamente
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Erro ao carregar cidades: ${snapshot.error}"));
                   } else if (_dbController.cities().isEmpty) {
                     return const Center(child: Text("Lista Vazia"));
                   } else {
@@ -82,10 +97,10 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: const Icon(Icons.delete, color: Colors.white),
                           ),
                           onDismissed: (direction) {
+                            setState(() {
+                              _dbController.cities().removeAt(index); // Remove localmente da lista
+                            });
                             _dbController.removeCity(city.cityName).then((_) {
-                              setState(() {
-                                _dbController.cities().removeAt(index);
-                              });
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text('Cidade removida: ${city.cityName}'),
@@ -94,7 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     onPressed: () {
                                       _dbController.addCity(city).then((_) {
                                         setState(() {
-                                          _dbController.cities().insert(index, city);
+                                          _dbController.cities().insert(index, city); // Insere de volta na lista
                                         });
                                       });
                                     },
